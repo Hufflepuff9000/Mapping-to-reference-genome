@@ -1,0 +1,37 @@
+### LOG FILE ###
+ 
+#== make sure there are two paired failes per sample
+cat PA_EKDN230043157-1A_22F52HLT3_L4_1.fq.gz PA_EKDN230043157-1A_22FCMGLT3_L6_1.fq.gz > PA_EKDN230043157-1A_22F_1.fq.gz
+cat PA_EKDN230043157-1A_22F52HLT3_L4_2.fq.gz PA_EKDN230043157-1A_22FCMGLT3_L6_2.fq.gz > PA_EKDN230043157-1A_22F_2.fq.gz
+ 
+#== Create index
+bwa index GCA_900538255.1_Ulvmu_WT_fa_genomic.fna
+ 
+#== Map with bwa
+screen -S mapping
+find /home/lvdrloos/Documents/mapping_reference_Ulva/Danish_strains/ -name "*.fq.gz" | grep -v _2.fq.gz | sed 's/_1.fq.gz//' | parallel bwa mem /home/lvdrloos/Documents/mapping_reference_Ulva/reference_index_files/GCA_900538255.1_Ulvmu_WT_fa_genomic.fna {}_1.fq.gz {}_2.fq.gz '>' '{}'.sam
+ 
+#== Or map with bowtie2
+bowtie2-build /home/lvdrloos/Documents/mapping_reference_Ulva/reference_index_files_bowtie2/GCA_900538255.1_Ulvmu_WT_fa_genomic.fna GCA_900538255.1_Ulvmu_WT
+bowtie2 -x /home/lvdrloos/Documents/mapping_reference_Ulva/reference_index_files_bowtie2/GCA_900538255.1_Ulvmu_WT -q --very-sensitive -p 8 -I 0 -X 1500 --fr -1 PA_EKDN230043157-1A_22F_1.fq.gz -2 PA_EKDN230043157-1A_22F_2.fq.gz -S PA_sample.sam
+ 
+#== Convert to BAM
+samtools view -@ 8 -Sb -o PA_EKDN230043157-1A_22F.bam PA_EKDN230043157-1A_22F.sam
+samtools sort -O bam -o sorted_PA_EKDN230043157-1A_22F.bam PA_EKDN230043157-1A_22F.bam 
+samtools index sorted_PA_EKDN230043157-1A_22F.bam
+ 
+#== Find unmapped reads
+samtools view -u -f 4 -F 264 sorted_PA_EKDN230043157-1A_22F.bam  > PA_tmps1.bam
+samtools view -u -f 8 -F 260 sorted_PA_EKDN230043157-1A_22F.bam  > PA_tmps2.bam
+samtools view -u -f 12 -F 256 sorted_PA_EKDN230043157-1A_22F.bam > PA_tmps3.bam
+samtools merge -u PA_unmapped.bam PA_tmps*.bam
+samtools sort -O bam -n -o PA_unmapped_sorted.bam PA_unmapped.bam
+ 
+#== Find mapped reads
+samtools view -u -f 1 -F 12 sorted_PA_EKDN230043157-1A_22F.bam > PA_mapped.bam
+samtools sort -O bam -n -o PA_mapped_sorted.bam PA_mapped.bam
+ 
+#== Count reads to see if it adds up
+samtools flagstat sorted_PA_EKDN230043157-1A_22F.bam # total number of reads
+samtools view -c PA_mapped_sorted.bam # mapped reads
+samtools view -c PA_unmapped_sorted.bam  # unmapped reads

@@ -1,4 +1,4 @@
-
+#Make sure all your .sam files are in the same folder for this script. This script will generate .bam-files, and seperate them into mapped & unmapped reads.
 for i in WBA25 UPA3_2 U1_862 Tene45_2 Sicily2 S82 S760A2 S121 mars1 M96M1 M96F4 J1M2 J1F1 Ire_RUS42 DK_WT3 DE_plus DE_min
 do
   samtools view -@ 8 -Sb -o ${i}.bam ${i}.sam

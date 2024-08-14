@@ -4,4 +4,7 @@ do
   samtools view -@ 8 -Sb -o ${i}.bam ${i}.sam
   samtools sort -O bam -o sorted_${i}.bam ${i}.bam 
   samtools index sorted_${i}.bam
+
+  samtools view -u -f 1 -F 12 sorted_${i}.bam > ${i}_mapped.bam
+  samtools sort -O bam -n -o ${i}_mapped_sorted.bam ${i}_mapped.bam
 done

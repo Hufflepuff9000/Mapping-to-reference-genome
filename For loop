@@ -5,6 +5,13 @@ do
   samtools sort -O bam -o sorted_${i}.bam ${i}.bam 
   samtools index sorted_${i}.bam
 
+  samtools view -u -f 4 -F 264 sorted_${i}.bam  > ${i}_tmps1.bam
+  samtools view -u -f 8 -F 260 sorted_${i}.bam  > ${i}_tmps2.bam
+  samtools view -u -f 12 -F 256 sorted_${i}.bam > ${i}_tmps3.bam
+  samtools merge -u ${i}_unmapped.bam ${i}_tmps*.bam
+  samtools sort -O bam -n -o ${i}_unmapped_sorted.bam ${i}_unmapped.bam
+
   samtools view -u -f 1 -F 12 sorted_${i}.bam > ${i}_mapped.bam
   samtools sort -O bam -n -o ${i}_mapped_sorted.bam ${i}_mapped.bam
+
 done

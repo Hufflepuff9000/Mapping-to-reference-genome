@@ -1,6 +1,5 @@
-for every i in WBA25 UPA3_2 U1_862 Tene45_2 Sicily2 S82 S760A2 S121 mars1 M96M1 M96F4 J1M2 J1F1 Ire_RUS42 DK_WT3 DE_plus DE_min
+
+for i in WBA25 UPA3_2 U1_862 Tene45_2 Sicily2 S82 S760A2 S121 mars1 M96M1 M96F4 J1M2 J1F1 Ire_RUS42 DK_WT3 DE_plus DE_min
 do
-  find /media/HD3/home/emmaco/Documents/Pangenome/01.RawData/i/*.sam | samtools view -@ 8 -Sb -o {i}.bam *.sam
-  samtools sort -O bam -o sorted_{i}.bam {i}.bam 
-  samtools index sorted_{i}.bam
+  samtools view -@ 8 -Sb -o {i}.bam /media/HD3/home/emmaco/Documents/Pangenome/01.RawData/*/*.sam
 done

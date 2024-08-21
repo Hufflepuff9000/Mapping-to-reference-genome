@@ -2,7 +2,7 @@ export PATH=$PATH:media/HD3/home/emmaco/miniforge3/bin #The path to where the bl
 echo $PATH #Check if the path is present
 cd $HOME/blastdb #change to the directory where the database is present.
 
-for i in Ire_RUS42 DK_WT3 DE_plus DE_min
+for i in J1F1 J1M2 M96F4 M96M1 mars1 S121 S760A2 S82 Sicily2 Tene45 WT1_862 UPA3_2 WBA25 Ire_RUS42 DK_WT3 DE_plus DE_min
 do
 
 samtools fasta /media/HD3/home/emmaco/Documents/Pangenome/processed/${i}_unmapped_sorted.bam > /media/HD3/home/emmaco/Documents/Pangenome/processed/${i}_unmapped_sorted.fasta

@@ -1,12 +1,11 @@
 export PATH=$PATH:media/HD3/home/emmaco/miniforge3/bin #The path to where the blastn programs & files are installed
 echo $PATH #Check if the path is present
-cd $HOME/blastdb #change to the directory where the database(s) are present.
-blastn -db nt_prok -query /media/HD3/home/emmaco/Documents/Pangenome/processed/WBA_unmapped/sorted.fasta #Specify the database; here nt_prok. Then specify the FASTA-fileyou want to score against the database.
-
+cd $HOME/blastdb #change to the directory where the database is present.
 
 for i in Ire_RUS42 DK_WT3 DE_plus DE_min
 do
 
-samtools fasta ${i}_unmapped_sorted.bam ${i}_unmapped_sorted.fasta
+samtools fasta /media/HD3/home/emmaco/Documents/Pangenome/processed/${i}_unmapped_sorted.bam > /media/HD3/home/emmaco/Documents/Pangenome/processed/${i}_unmapped_sorted.fasta
+blastn -db core_nt -query /media/HD3/home/emmaco/Documents/Pangenome/processed/${i}_unmapped_sorted.fasta -out /media/HD3/home/emmaco/Documents/Pangenome/processed/blast-output/${i}_blast.out
 
-
+done

@@ -1,6 +1,8 @@
 export PATH=$PATH:media/HD3/home/emmaco/miniforge3/bin #The path to where the blastn programs & files are installed
 echo $PATH #Check if the path is present
 cd $HOME/blastdb #change to the directory where the database is present.
+#Command for a single line is: blastn -db nt_prok -query /media/HD3/home/emmaco/Documents/Pangenome/processed/WBA_unmapped_sorted.fasta -out WBA25-blast.out
+
 
 screen -S Blastify
 

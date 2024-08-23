@@ -1,10 +1,10 @@
 #Make sure all your .sam files are in the same folder for this script. This script will generate .bam-files, and seperate them into mapped & unmapped reads.
-#GCA_900538255.1_Ulvmu_WT_fa_genomic.fna is the reference. First directory must contain all .fq.gz files. Make sure to name your files accordingly.
+#GCA_024500015.1_ASM2450001v1_genomic.fna is the reference. First directory must contain all .fq.gz files. Make sure to name your files accordingly.
 screen -S mapping
-for i in Ire_RUS42 DK_WT3 DE_plus DE_min
+for i in U34_Full J1F1 mars1
 do
 
-  find /media/HD3/home/emmaco/Documents/Pangenome/processed/ -name "*.fq.gz" | grep -v _2.fq.gz | sed 's/_1.fq.gz//' | parallel bwa mem GCA_900538255.1_Ulvmu_WT_fa_genomic.fna ${i}_1.fq.gz ${i}_2.fq.gz '>' '${i}'.sam
+  find /media/HD3/home/emmaco/Documents/Pangenome/ -name "*.fq.gz" | grep -v _2.fq.gz | sed 's/_1.fq.gz//' | parallel bwa mem "/media/HD3/home/emmaco/Documents/Nucleomics_genomes/GCA_024500015.1_ASM2450001v1_genomic.fna" ${i}_1.fq.gz ${i}_2.fq.gz '>' '${i}'.sam
   samtools view -@ 8 -Sb -o ${i}.bam ${i}.sam
   samtools sort -O bam -o sorted_${i}.bam ${i}.bam 
   samtools index sorted_${i}.bam

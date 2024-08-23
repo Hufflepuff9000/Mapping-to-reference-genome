@@ -1,1 +1,15 @@
 
+  find /media/HD3/home/emmaco/Documents/Chinese-U-34/U34 -name "*.fq.gz" | grep -v _2.fq.gz | sed 's/_1.fq.gz//' | parallel bwa mem /media/HD3/home/emmaco/Documents/Nucleomics_genomes/GCA_024500015.1_ASM2450001v1_genomic.fna {}_1.fq.gz {}_2.fq.gz > U34.sam
+  samtools view -@ 8 -Sb -o U34.bam U34.sam
+  samtools sort -O bam -o sorted_U34.bam U34.bam 
+  samtools index sorted_U34.bam
+
+  samtools view -u -f 4 -F 264 sorted_U34.bam  > U34_tmps1.bam
+  samtools view -u -f 8 -F 260 sorted_U34.bam  > U34_tmps2.bam
+  samtools view -u -f 12 -F 256 sorted_U34.bam > U34_tmps3.bam
+  samtools merge -u U34_unmapped.bam U34_tmps*.bam
+  samtools sort -O bam -n -o U34_unmapped_sorted.bam U34_unmapped.bam
+
+  samtools view -u -f 1 -F 12 sorted_U34.bam > U34_mapped.bam
+  samtools sort -O bam -n -o U34_mapped_sorted.bam U34_mapped.bam
+
